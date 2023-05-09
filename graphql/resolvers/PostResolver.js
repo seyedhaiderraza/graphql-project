@@ -93,6 +93,32 @@ const postResolvers = {
             } catch (err) {
                 throw new Error('Post Not Found')
             }
+        },
+        async likeUnlikePost(_, args, context) {
+            const user = checkAuth(context)
+            try {
+                const post = await postModel.findById({ _id: args.postId })
+
+                if (post.likes && post.likes.find((like) => like.username === user.username)) {
+                    const reducedLikes = post.likes.filter(like => like.username !== user.username)
+                    post.likes = reducedLikes
+                    await post.save()
+                    return post
+                } else {
+                    const newLike = {
+
+                        createdAt: new Date().toISOString(),
+                        username: user.username
+                    }
+                    post.likes ? post.likes.push(newLike) : post.likes = [newLike]
+                        //  post.likes = likes
+
+                    await post.save()
+                    return post
+                }
+            } catch (err) {
+                throw new Error('Post doesn\'t exists')
+            }
         }
     }
 }
