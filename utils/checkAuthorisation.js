@@ -2,7 +2,6 @@ const { AuthenticationError } = require('apollo-server')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 module.exports.checkAuth = (context) => {
-    console.log(context.req.headers.authorization);
     const authHeader = context.req.headers.authorization
     try {
         if (authHeader !== '') {

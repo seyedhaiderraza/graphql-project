@@ -1,3 +1,4 @@
+const { UserInputError, AuthenticationError } = require('apollo-server')
 const postModel = require('../../models/Post')
 const { checkAuth } = require('../../utils/checkAuthorisation')
 const postResolvers = {
@@ -56,6 +57,41 @@ const postResolvers = {
                 }
             } catch (err) {
                 throw new Error(err)
+            }
+        },
+        async createComment(_, args, context) {
+            const { postId, body } = args
+            const user = checkAuth(context)
+
+            try {
+                if (body.trim() == '') { throw new UserInputError('comment cannot be empty') }
+                const newComment = { username: user.username, body: body, createdAt: new Date().toISOString() }
+                const post = await postModel.findById({ _id: postId })
+                post.comments.unshift(newComment)
+                await post.save()
+                return post;
+            } catch (err) {
+                throw new Error('Post Not Found')
+            }
+        },
+        async deleteComment(_, args, context) {
+            const { postId, commentId } = args
+            const user = checkAuth(context)
+            try {
+
+                const post = await postModel.findById({ _id: postId })
+
+                const commentIndex = post.comments.findIndex(comment => comment.id === commentId)
+                if (post.comments[commentIndex].username !== user.username) {
+                    throw new AuthenticationError('User Not Allowed to delete this comment')
+                }
+                post.comments.splice(commentIndex, 1)
+                await post.save()
+                return post
+
+
+            } catch (err) {
+                throw new Error('Post Not Found')
             }
         }
     }
