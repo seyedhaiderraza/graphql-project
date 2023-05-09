@@ -8,6 +8,8 @@ type Post{
     username: String!
     comments: [Comment]!
     likes: [Like]!
+    likeCount: Int!
+    commentCount: Int!
 }
 type Comment{
     id: ID!
@@ -37,8 +39,6 @@ input registerUserInput{
 type Query{
     getPosts : [Post]
     getPost(postId: ID!): Post
-}
-type Query{
     getUsers : [User]
 }
 type Mutation{
@@ -49,6 +49,9 @@ type Mutation{
     createComment(postId: String!, body: String!): Post!
     deleteComment(postId: String!, commentId: String!):Post!
     likeUnlikePost(postId:String!): Post!
+}
+type Subscription{
+    newPost: Post!
 }
 `
 module.exports = typeDefs

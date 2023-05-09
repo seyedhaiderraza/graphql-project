@@ -39,6 +39,9 @@ const postResolvers = {
                 })
                 return await newPost.save()
 
+                context.pubsub.publish('NEW_POST', {
+                    newPost: newPost
+                })
 
             } catch (err) {
                 throw new Error(err)
@@ -119,6 +122,11 @@ const postResolvers = {
             } catch (err) {
                 throw new Error('Post doesn\'t exists')
             }
+        }
+    },
+    Subscription: {
+        newPost: {
+            subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('NEW_POST')
         }
     }
 }

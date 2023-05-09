@@ -1,6 +1,13 @@
 const postsResolvers = require('./PostResolver')
 const usersResolvers = require('./UserResolver')
 const resolvers = {
+    Post: {
+        likeCount(parent) {
+            console.log(parent)
+            return parent.likes.length
+        },
+        commentCount: (parent) => parent.comments.length
+    },
     Query: {
         ...postsResolvers.Query
 
@@ -8,6 +15,9 @@ const resolvers = {
     Mutation: {
         ...usersResolvers.Mutation,
         ...postsResolvers.Mutation
+    },
+    Subscription: {
+        ...postsResolvers.Subscription
     }
 }
 
