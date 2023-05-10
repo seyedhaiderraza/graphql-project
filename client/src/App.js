@@ -8,9 +8,11 @@ import Register from './pages/Register';
 import MenuBar from './components/MenuBar';
 import { Container } from 'semantic-ui-react';
 function App() {
+   //<container>gives left right margins and padding centerise the content
   return (
     <Router>
     <MenuBar/>
+    <Container>
       <Routes>
         <Route  path='/' Component={Home}/>
         
@@ -19,7 +21,7 @@ function App() {
         
         <Route  path='/register' Component={Register}/>
         </Routes>
-     
+        </Container>
     </Router>
   );
 }
