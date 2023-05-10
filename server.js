@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server')
-const { PubSub } = require('apollo-server')
+const { PubSub } = require('graphql-subscriptions')
 const gql = require('graphql-tag')
 const mongoose = require('mongoose')
 require('dotenv').config()
