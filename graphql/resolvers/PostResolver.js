@@ -31,6 +31,9 @@ const postResolvers = {
             const user = checkAuth(context)
                 //no need to assert user as error handling already done in checkauth
             try {
+                if (body.trim === '') {
+                    throw new Error('post content cannot be empty')
+                }
                 const newPost = new postModel({
                     user: user.id,
                     username: user.username,
