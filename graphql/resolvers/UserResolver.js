@@ -1,7 +1,7 @@
 const { UserInputError } = require('apollo-server')
 const bcrypt = require('bcrypt')
 const userModel = require('../../models/User')
-const { validateRegisterInputs } = require('../../utils/Validations')
+const { validateRegisterInputs, validateLoginInputs } = require('../../utils/Validations')
 const jsonwebtoken = require('jsonwebtoken')
 require('dotenv').config()
 const genJWTToken = (user) => {
@@ -56,7 +56,7 @@ const usersResolvers = {
             //  2. check if user already exists in DB
             const existingUser = await userModel.findOne({ username })
             if (existingUser)
-                throw new UserInputError('Username already taken', { errors: { username: 'already taken' } })
+                throw new UserInputError('Username already taken', { errors: { username: 'username already taken' } })
                     // 3. convert password into hash -> store the new user details
             const hashedPassword = await bcrypt.hash(password, 12)
 
@@ -80,7 +80,11 @@ const usersResolvers = {
         async loginUser(_, args, context, info) {
             const { username, password } = args
             console.log(username, password);
-
+            const { valid, validationResult } = validateLoginInputs(username,
+                password);
+            if (!valid) {
+                throw new UserInputError('Request Validation error', { errors: { validationResult } })
+            }
             //find existing user else throw error
             const user = await userModel.findOne({ username })
             if (!user) {

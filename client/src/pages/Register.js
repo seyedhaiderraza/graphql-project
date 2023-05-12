@@ -9,6 +9,7 @@ function Register() {
     confirmPassword:'',
     email:''
   })
+  const [errors, setErrors] = useState({})
   const onChangeHandler = (event)=>{
     setValues({...values, [event.target.name]: event.target.value})
   }
@@ -16,6 +17,9 @@ function Register() {
   const [addUser, {loading}] = useMutation(REGISTER_USER_MUTATION,{
     update(proxy, result){
       console.log(result);
+    },onError(err){
+      console.log(err.graphQLErrors);
+      setErrors(err.graphQLErrors[0].extensions.errors)
     },
     variables:{
       username:values.username,
@@ -69,6 +73,14 @@ function Register() {
       <Button type="submit" primary>Register</Button>
       
     </Form>
+    {errors && Object.keys(errors).length>0 &&(<div className="ui error message">
+      <ul className="list">
+        {Object.values(errors.validationResult).map(value=>(
+          <li key={value}>{value}</li>
+        ))}
+      </ul>
+    </div>)}
+    
       </div>
   )
 }
