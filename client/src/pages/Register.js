@@ -1,9 +1,14 @@
 import { gql } from 'graphql-tag'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import {useMutation} from '@apollo/client'
 import useForm from '../components/useForm'
+import { AuthContext } from '../context/auth'
+
+import { useNavigate } from 'react-router-dom'
 function Register(props) {
+  const navigate = useNavigate()
+  const context = useContext(AuthContext)
   const initialState={
     username:'',
     password:'',
@@ -19,7 +24,8 @@ function Register(props) {
   const [addUser, {loading}] = useMutation(REGISTER_USER_MUTATION,{
     update(proxy, result){
 console.log(result);
-      props.redirectCallback('/')
+context.login(result.data.registerUser)
+      navigate('/')
     },onError(err){
      
       setErrors(err?.graphQLErrors[0]?.extensions?.errors)

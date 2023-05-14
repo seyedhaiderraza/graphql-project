@@ -3,9 +3,11 @@ import React, { useContext, useState } from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import {useMutation} from '@apollo/client'
 import useForm from '../components/useForm'
-//import { AuthContext } from '../context/auth'
+import { AuthContext } from '../context/auth'
+import {useNavigate} from 'react-router-dom'
 function Login(props) {
- // const context = useContext(AuthContext)
+  const navigate = useNavigate()
+  const context = useContext(AuthContext)
   const initialState={
     username:'',
     password:''
@@ -18,8 +20,13 @@ function Login(props) {
 
   const [loginUser, {loading}] = useMutation(LOGIN_USER_MUTATION,{
     update(proxy, result){
-      console.log(result);
-      props.redirectCallback('/')
+      console.log(result.data.loginUser);
+     
+        context.login(result.data.loginUser)
+        console.log(context.user);
+        navigate("/")
+      
+    
     },onError(err){
       setErrors(err?.graphQLErrors[0]?.extensions?.code)
     },
