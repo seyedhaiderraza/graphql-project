@@ -57,7 +57,7 @@ const postResolvers = {
                     const existingPost = postModel.findById(postId)
                     if (existingPost) {
                         const deleteStatus = await postModel.deleteOne({ _id: postId })
-                        console.log(deleteStatus);
+                      
                         return deleteStatus.deletedCount === 1 ? 'post deleted successfully' : "post delete failure"
                     }
                 }

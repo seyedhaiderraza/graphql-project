@@ -3,7 +3,7 @@ import moment from 'moment'
 import { Link } from 'react-router-dom';
 function PostCard(props){
     const {id, createdAt, username, body, likeCount, commentCount} = props.post
-    console.log(body);
+    
     //fluid makes card take more width 
     const likePost = ()=>{
 

@@ -15,8 +15,7 @@ module.exports.validateRegisterInputs = (
     
    
         
-        console.log(validationResult)
-    return { valid: validationResult.length<1, validationResult: validationResult } 
+    return { valid: Object.keys(validationResult).length<1, validationResult: validationResult } 
 }
 module.exports.validateLoginInputs = (
     username,
@@ -26,4 +25,4 @@ module.exports.validateLoginInputs = (
     username.trim() === '' ? validationResult.username='username invalid':false
         password === '' ? validationResult.password='password invalid':false
 
-        return { valid: validationResult.length<1, validationResult: validationResult } }
+        return { valid: Object.keys(validationResult).length<1, validationResult: validationResult } }

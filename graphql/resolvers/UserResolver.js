@@ -6,7 +6,6 @@ const jsonwebtoken = require('jsonwebtoken')
 require('dotenv').config()
 const genJWTToken = (user) => {
 
-    console.log(user);
     const token =
         jsonwebtoken.sign({
             id: user.id,
@@ -79,7 +78,6 @@ const usersResolvers = {
 
         async loginUser(_, args, context, info) {
             const { username, password } = args
-            console.log(username, password);
             const { valid, validationResult } = validateLoginInputs(username,
                 password);
             if (!valid) {
@@ -98,7 +96,7 @@ const usersResolvers = {
             }
             //generate jwt and send respone(user+token)
             const token = genJWTToken(user)
-            console.log(user)
+          
             return {
                 ...user._doc,
                 id: user._id,

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import {useMutation} from '@apollo/client'
 import useForm from '../components/useForm'
-function Register() {
+function Register(props) {
   const initialState={
     username:'',
     password:'',
@@ -11,16 +11,17 @@ function Register() {
     email:''
   }
   const [errors, setErrors] = useState({})
-  console.log(errors);
+ 
   
   const {onChangeHandler, performSubmit, values} = useForm(callAddUser,initialState)
   
 
   const [addUser, {loading}] = useMutation(REGISTER_USER_MUTATION,{
     update(proxy, result){
-      console.log(result);
+
+      props.history.push("/")
     },onError(err){
-      console.log(err.graphQLErrors);
+     
       setErrors(err.graphQLErrors[0].extensions.errors)
     },
     variables:{

@@ -7,7 +7,7 @@ import PostCard from '../components/PostCard'
 function Home() {
     const {loading, data} = useQuery(FETCH_ALL_POSTS_QUERY)
   const {getPosts} = data||{} // if we don't put ||{} this will read data as undefined when fetch query is loading will give error so we assing {} initially untill data is loaded
-    console.log(getPosts);
+  
         // if column={3} is missing post cards will be displayed on one column only which is all vertically
   return (
     <Grid columns={3}>
