@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import MenuBar from './components/MenuBar';
 import { Container } from 'semantic-ui-react';
 import { useState } from 'react';
-import {AuthProvider} from './context/auth'
+import {AuthProvider} from './context/Auth'
 function App() {
   
    //<container>gives left right margins and padding centerise the content

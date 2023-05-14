@@ -3,8 +3,7 @@ import React, { useContext, useState } from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import {useMutation} from '@apollo/client'
 import useForm from '../components/useForm'
-import { AuthContext } from '../context/auth'
-
+import { AuthContext } from '../context/Auth'
 import { useNavigate } from 'react-router-dom'
 function Register(props) {
   const navigate = useNavigate()
@@ -40,7 +39,17 @@ context.login(result.data.registerUser)
   function callAddUser(){
     addUser()
   }
-  return (
+  const handleLogout = () => {
+    context.logout();
+    navigate('/register')
+  };
+  const registerPage = context.user? (
+    <div>
+    <h1>You are already loggedin!</h1><br/>
+    <h3>Click here to logout </h3> <Button color='teal' onClick={handleLogout}>Click here to logout</Button>
+  </div>
+  ):
+ (
     <div>
     <Form onSubmit={performSubmit} className={loading? "loading":''} noValidate
      style={{width:'400px', margin:'auto'}}>
@@ -99,6 +108,7 @@ context.login(result.data.registerUser)
     
       </div>
   )
+  return registerPage
 }
 
 const REGISTER_USER_MUTATION = gql`
