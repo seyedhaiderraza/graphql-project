@@ -94,7 +94,7 @@ const usersResolvers = {
             const validPass = await bcrypt.compare(password, user.password)
 
             if (!validPass) {
-                throw new UserInputError('Password incorrect', { errors: { username: 'password incorrect than actual password' } })
+                throw new UserInputError('Password incorrect', { errors: { password: 'password incorrect than actual password' } })
             }
             //generate jwt and send respone(user+token)
             const token = genJWTToken(user)
