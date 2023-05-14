@@ -7,22 +7,31 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import MenuBar from './components/MenuBar';
 import { Container } from 'semantic-ui-react';
+import { useState } from 'react';
+//import {AuthProvider} from './context/auth'
 function App() {
+  const[urlRedirect, setUrlRedirect] = useState('')
+ function updateRedirectRoute(path){
+    setUrlRedirect(path)
+    window.location.href=path
+  }
    //<container>gives left right margins and padding centerise the content
   return (
+    //<AuthProvider>
     <Router>
     <MenuBar/>
     <Container>
       <Routes>
-        <Route  path='/' Component={Home}/>
+        <Route  path='/' element=<Home/>/>
         
-        <Route  path='/login' Component={Login}/>
+        <Route  path='/login' element=<Login redirectCallback={updateRedirectRoute}/>/>
 
         
-        <Route  path='/register' Component={Register}/>
+        <Route  path='/register' element=<Register redirectCallback={updateRedirectRoute}/>/>
         </Routes>
         </Container>
     </Router>
+   // </AuthProvider>
   );
 }
 

@@ -18,11 +18,11 @@ function Register(props) {
 
   const [addUser, {loading}] = useMutation(REGISTER_USER_MUTATION,{
     update(proxy, result){
-
-      props.history.push("/")
+console.log(result);
+      props.redirectCallback('/')
     },onError(err){
      
-      setErrors(err.graphQLErrors[0].extensions.errors)
+      setErrors(err?.graphQLErrors[0]?.extensions?.errors)
     },
     variables:{
       username: values.username,
