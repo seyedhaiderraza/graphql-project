@@ -2,9 +2,9 @@ import { gql } from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import {useMutation} from '@apollo/client'
+import { AuthContext } from '../context/Auth';
 import useForm from '../components/useForm'
 import {useNavigate} from 'react-router-dom'
-import { AuthContext } from '../context/Auth'
 function Login(props) {
   const navigate = useNavigate()
   const context = useContext(AuthContext)
