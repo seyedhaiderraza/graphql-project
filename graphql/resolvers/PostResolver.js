@@ -5,7 +5,7 @@ const postResolvers = {
     Query: {
         async getPosts() {
             try {
-                const posts = await postModel.find()
+                const posts = await postModel.find().sort({ createdAt: -1 }) //sort for descending order of creation
                 return posts
             } catch (err) {
                 throw new Error(err)

@@ -1,13 +1,23 @@
 import {Button, Card, Icon, Image, Label} from 'semantic-ui-react';
 import moment from 'moment'
 import { Link } from 'react-router-dom';
-function PostCard(props){
-    const {id, createdAt, username, body, likeCount, commentCount} = props.post
-    
-    //fluid makes card take more width 
-    const likePost = ()=>{
+import { AuthContext } from '../context/Auth';
+import { useContext } from 'react';
+import LikeComponent from '../components/LikeComponent'
+import { useMutation, useQuery } from '@apollo/client';
+import { DELETE_POST_MUTATION, FETCH_ALL_POSTS_QUERY } from '../util/Query';
 
-    }
+function PostCard(props){
+    const {id, createdAt, username, body,likes , likeCount, commentCount} = props.post
+    const {user} = useContext(AuthContext)
+    //fluid makes card take more width 
+    const [deletePost] = useMutation(DELETE_POST_MUTATION,{
+       
+            variables:{postId:id},
+            refetchQueries: [{ query: FETCH_ALL_POSTS_QUERY }],//updates apolloclient cache 
+        
+    })
+
     const commmentOnPost = ()=>{
 
     }
@@ -20,15 +30,8 @@ function PostCard(props){
                 <Card.Description>{body}</Card.Description>
             </Card.Content>
             <Card.Content>
-                <Button as='div' labelPosition='right' onClick={likePost}>
-                    <Button color='red' basic={likeCount===0?true:false}>
-                    <Icon name='heart' />
-                    </Button>
-                    <Label as='a' basic color='teal' pointing='left'>
-                           {likeCount}
-                    </Label>
-                </Button>
-                <Button as='div' labelPosition='right' onClick={commmentOnPost}>
+                <LikeComponent user={user} post={{id, likes, likeCount}}/>
+                <Button  labelPosition='right' as={Link} to={`/posts/${id}`}>
                     <Button color='blue' basic={commentCount===0?true:false}>
                     <Icon name='comment' />
                     </Button>
@@ -36,6 +39,17 @@ function PostCard(props){
                            {commentCount}
                     </Label>
                 </Button>
+                {user && user.username===username &&
+                (
+                    <Button  labelPosition='right' floated='right' onClick={deletePost}>
+                    <Button color='grey' basic={false}>
+                    <Icon name='trash' style={{margin:0}}/>
+                    </Button>
+                </Button>   
+                )
+
+
+                }
             </Card.Content>
         </Card>
     )

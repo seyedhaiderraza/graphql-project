@@ -37,4 +37,21 @@ query{
     }
 }
 `
-export {CREATE_POST_MUTATION, FETCH_ALL_POSTS_QUERY}
+
+const LIKE_POST_MUTATION = gql `
+mutation LikeUnlikePost($postId: String!) {
+  likeUnlikePost(postId: $postId) {
+    id 
+    likes{
+      id username
+    }
+    likeCount
+  }
+}
+`
+const DELETE_POST_MUTATION = gql `
+mutation DeletePost($postId: ID!) {
+  deletePost(postId: $postId)
+}
+`
+export {CREATE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, LIKE_POST_MUTATION, DELETE_POST_MUTATION}
