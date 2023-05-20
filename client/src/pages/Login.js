@@ -28,7 +28,8 @@ function Login(props) {
       
     
     },onError(err){
-      setErrors(err?.graphQLErrors[0]?.extensions?.code)
+      console.log('login user error',err?.graphQLErrors[0]?.extensions?.errors)
+      setErrors(err?.graphQLErrors[0]?.extensions?.errors)
     },
     variables:{
       username: values.username,
@@ -59,7 +60,7 @@ function Login(props) {
         placeholder="Username..."
         type="text"
         value={values.username}
-       error={errors?.validationResult?.username? true:false}
+       error={errors?.username? true:false}
         onChange={onChangeHandler}
       />
       <Form.Input
@@ -70,16 +71,17 @@ function Login(props) {
         
         value={values.password}
         
-        error={errors?.validationResult?.password? true:false}
+        error={errors?.password? true:false}
         onChange={onChangeHandler}
       />
       <Button type="submit" primary>Login</Button>
       
     </Form>
-    {errors && Object.keys(errors).length>0 &&(<div className="ui error message">
-      <ul className="list">
-        {Object.keys(errors.validationResult).map(key=>(
-          <li key={key}>{key}: {errors.validationResult[key]}</li>
+    {errors && Object.keys(errors).length>0 &&(
+      <div className="ui error message">
+      <ul>
+        {Object.keys(errors).map(key=>(
+          <li key={key}>{key}: {errors[key]}</li>
         ))}
       </ul>
     </div>)}
