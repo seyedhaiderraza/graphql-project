@@ -19,10 +19,10 @@ const postResolvers = {
                     if (existingPost)
                         return existingPost
                     else
-                        throw new Error('Post not found')
+                        throw new UserInputError('Post not found')
                 }
             } catch (err) {
-                throw new Error('user not found')
+                throw new AuthenticationError('user not found')
             }
         }
     },
@@ -31,8 +31,8 @@ const postResolvers = {
             const user = checkAuth(context)
                 //no need to assert user as error handling already done in checkauth
             try {
-                if (args?.body?.trim === '') {
-                    throw new Error('post content cannot be empty')
+                if (args?.body?.trim() == '') {
+                    throw new UserInputError('Post cannot be empty')
                 }
                 const newPost = new postModel({
                     user: user.id,
@@ -47,7 +47,7 @@ const postResolvers = {
                 })
 
             } catch (err) {
-                throw new Error(err)
+                throw new UserInputError(err)
             }
         },
         async deletePost(_, { postId }, context) {

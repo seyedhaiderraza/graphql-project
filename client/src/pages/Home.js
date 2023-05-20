@@ -1,10 +1,11 @@
 import { useQuery } from '@apollo/client'
 import { gql } from 'graphql-tag'
 import React, { useContext } from 'react'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Transition, TransitionGroup } from 'semantic-ui-react'
 import PostCard from '../components/PostCard'
 import { AuthContext } from '../context/Auth';
 import CreatePostForm from '../components/CreatePostForm'
+import { FETCH_ALL_POSTS_QUERY } from '../util/Query'
 function Home() {
     const {loading, data} = useQuery(FETCH_ALL_POSTS_QUERY)
   const {getPosts} = data||{} // if we don't put ||{} this will read data as undefined when fetch query is loading will give error so we assing {} initially untill data is loaded
@@ -24,11 +25,13 @@ function Home() {
           {loading?(
             <h1>Loading posts</h1>
           ):(
-            getPosts && getPosts.map(post=>(
+            <TransitionGroup>
+            {getPosts && getPosts.map(post=>(
               <Grid.Column key={post.id} style={{marginBottom: 20}}>
                 <PostCard post={post}/>
               </Grid.Column>
-            ))
+            ))}
+            </TransitionGroup>
           )}
         </Grid.Row>
     </Grid>
@@ -36,18 +39,4 @@ function Home() {
   )
 }
 
-const FETCH_ALL_POSTS_QUERY = gql`
-query{
-    getPosts{
-        id createdAt body username 
-        likeCount commentCount
-        likes{
-            id username
-        }
-        comments{
-            id createdAt body username
-        }
-    }
-}
-`
 export default Home
