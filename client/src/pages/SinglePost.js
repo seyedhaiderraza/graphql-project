@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { DELETE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, FETCH_SINGLE_POST_QUERY } from '../util/Query';
 import { Grid,Button, GridColumn, Card, Image, Icon } from 'semantic-ui-react';
 import LikeComponent from '../components/LikeComponent';
@@ -7,12 +7,13 @@ import { AuthContext } from '../context/Auth';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import CommentComponent from '../components/CommentComponent';
+import DeleteComponent from '../components/DeleteComponent';
 
 const SinglePost = () => {
     const navigate = useNavigate()
     const {user} = useContext(AuthContext)
     const {postId} = useParams();
-    
+    const [error, setError] = useState(null)
  
    console.log('SinglePost---------postId=>',postId)
 
@@ -23,7 +24,9 @@ const SinglePost = () => {
         variables:{
             postId:postId
         },onError(err){
-            console.log('fetch singe post error------------',err)
+            setError(err?.graphQLErrors[0]?.message)
+            console.log('fetch single post error------------',err?.graphQLErrors[0]?.message)
+           
         }
     })
 
@@ -40,8 +43,12 @@ const SinglePost = () => {
     
         })
     let postMarkup;
-    if (!getPost){
+    if (!getPost && !error){
         postMarkup= <p>Loading the post</p>
+    }
+    else if(error){
+        postMarkup= <h1>Please Login <br/><Button color='teal' as={Link} to={'/login'}>Login</Button> <br/>or<br/> Register<br/><Button color='blue' as={Link} to={'/register'}>Register</Button> <br/>to view this post</h1>
+      
     }
     else{
         const {id, username, createdAt,likes, likeCount, commentCount, comments,body  } = getPost
@@ -79,6 +86,28 @@ const SinglePost = () => {
                       }
                  </Card.Content>
              </Card>
+             {
+                comments.map(comment=>(
+                    <Card fluid key={comment.id}>
+                        <Card.Content>
+                        {user && user.username ===comment.username &&(
+                            <DeleteComponent postId={postId} commentId={comment.id}/>
+                        )}
+                            <Card.Header>
+                                {comment.username}
+                            </Card.Header>
+                            <Card.Meta>
+                                {moment(comment.createdAt).fromNow()}
+                            </Card.Meta>
+                            <Card.Description>
+                                {comment.body}
+                            </Card.Description>
+                        </Card.Content>
+                    </Card>
+                )
+
+                )
+             }
              </Grid.Column>
              </Grid.Row>
          </Grid>

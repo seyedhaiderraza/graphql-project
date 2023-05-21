@@ -7,17 +7,13 @@ import LikeComponent from '../components/LikeComponent'
 import { useMutation, useQuery } from '@apollo/client';
 import { DELETE_POST_MUTATION, FETCH_ALL_POSTS_QUERY } from '../util/Query';
 import CommentComponent from './CommentComponent';
+import DeleteComponent from './DeleteComponent';
 
 function PostCard(props){
     const {id, createdAt, username, body,likes , likeCount, commentCount} = props.post
     const {user} = useContext(AuthContext)
     //fluid makes card take more width 
-    const [deletePost] = useMutation(DELETE_POST_MUTATION,{
-       
-            variables:{postId:id},
-            refetchQueries: [{ query: FETCH_ALL_POSTS_QUERY }],//updates apolloclient cache 
-        
-    })
+   
 
     const commmentOnPost = ()=>{
 
@@ -35,11 +31,7 @@ function PostCard(props){
                <CommentComponent post={{id, commentCount}}/>
                 {user && user.username===username &&
                 (
-                    <Button  labelPosition='right' floated='right' onClick={deletePost}>
-                    <Button color='grey' basic={false}>
-                    <Icon name='trash' style={{margin:0}}/>
-                    </Button>
-                </Button>   
+               <DeleteComponent postId={id}/>
                 )
 
 

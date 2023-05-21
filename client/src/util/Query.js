@@ -76,4 +76,49 @@ query($postId: ID!) {
   }
 }
 `
-export {CREATE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, LIKE_POST_MUTATION, DELETE_POST_MUTATION, FETCH_SINGLE_POST_QUERY}
+const DELETE_COMMENT_MUTATION = gql`
+mutation DeleteComment($postId: ID!, $commentId: String!) {
+  deleteComment(postId: $postId, commentId: $commentId) {
+    body
+    commentCount
+    comments {
+      username
+      id
+      createdAt
+      body
+    }
+    createdAt
+    id
+    likeCount
+    username
+    likes {
+      createdAt
+      id
+      username
+    }
+  }
+}
+`
+const CREATE_COMMENT_MUTATION = gql`
+mutation CreateComment($postId: ID!, $body: String!) {
+  createComment(postId: $postId, body: $body) {
+    comments {
+      body
+      createdAt
+      id
+      username
+    }
+    body
+    commentCount
+    createdAt
+    id
+    likeCount
+    likes {
+      createdAt
+      id
+      username
+    }
+    username
+  }
+}`
+export {CREATE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, LIKE_POST_MUTATION, DELETE_POST_MUTATION, FETCH_SINGLE_POST_QUERY, DELETE_COMMENT_MUTATION, CREATE_COMMENT_MUTATION}
