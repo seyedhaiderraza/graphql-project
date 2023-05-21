@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Icon, Label, Popup } from 'semantic-ui-react'
 import { AuthContext } from '../context/Auth'
 import { Link } from 'react-router-dom'
@@ -9,11 +9,19 @@ const LikeComponent = ({post:{id, likes, likeCount}}) => {
 //if user not logged in=> show outline likebutton + link to login page
     
     const {user} = useContext(AuthContext) 
-    
+    const [liked,setLiked] = useState(false)
+    useEffect(()=>{
+      if(user && likes.find(like=>like.username==user.username)){
+        setLiked(true)
+      }else{
+        setLiked(false)
+      }
+    },[user,likes])
     //if u don't destructure it like {user} and use user then u need user.user.username to access
     
     const [likePost] = useMutation(LIKE_POST_MUTATION,
         {
+          
             variables:{postId:id}
         })
         const likeButtonComponent = 
@@ -43,7 +51,7 @@ const LikeComponent = ({post:{id, likes, likeCount}}) => {
     
         )
     
-  return ( <Popup inverted content='Like post' trigger={
+  return ( <Popup inverted content={liked?'UnLike post':'Like post'} trigger={
     likeButtonComponent
   }/>
   )
