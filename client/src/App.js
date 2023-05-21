@@ -9,6 +9,7 @@ import MenuBar from './components/MenuBar';
 import { Container } from 'semantic-ui-react';
 import { useState } from 'react';
 import {AuthProvider} from './context/Auth'
+import SinglePost from './pages/SinglePost'
 function App() {
   
    //<container>gives left right margins and padding centerise the content
@@ -25,6 +26,8 @@ function App() {
 
         
         <Route  path='/register' element=<Register/>/>
+
+        <Route  exact path='/posts/:postId' element=<SinglePost/>/>
         </Routes>
         </Container>
         

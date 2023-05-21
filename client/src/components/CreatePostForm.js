@@ -17,6 +17,8 @@ const [error, setError]= useState(null)
            data = {getPosts:[result?.data?.createPost,...data.getPosts]}
           proxy.writeQuery({query:FETCH_ALL_POSTS_QUERY,data})
           values.body=''
+          setError(null)
+          //without this seterror if post body empty erro shown ,then if post body not empty posted still the red highlight of error keeps showing
               },
               variables: 
                 {body:values.body}

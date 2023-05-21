@@ -16,7 +16,6 @@ const LikeComponent = ({post:{id, likes, likeCount}}) => {
         {
             variables:{postId:id}
         })
-        console.log(user.user)
         const likeButtonComponent = 
         user? (
         

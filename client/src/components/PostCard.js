@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import LikeComponent from '../components/LikeComponent'
 import { useMutation, useQuery } from '@apollo/client';
 import { DELETE_POST_MUTATION, FETCH_ALL_POSTS_QUERY } from '../util/Query';
+import CommentComponent from './CommentComponent';
 
 function PostCard(props){
     const {id, createdAt, username, body,likes , likeCount, commentCount} = props.post
@@ -26,19 +27,12 @@ function PostCard(props){
             <Card.Content>
                 <Image floated="right" size="mini" src="https://react.semantic-ui.com/images/avatar/large/molly.png"/>
                 <Card.Header>{username}</Card.Header>
-                <Card.Meta as={Link} to={`/posts/${id}`}>{moment(createdAt).fromNow()}</Card.Meta>
+                <Card.Meta  as={Link} to={`/posts/${id}`}>{moment(createdAt).fromNow()}</Card.Meta>
                 <Card.Description>{body}</Card.Description>
             </Card.Content>
             <Card.Content>
                 <LikeComponent user={user} post={{id, likes, likeCount}}/>
-                <Button  labelPosition='right' as={Link} to={`/posts/${id}`}>
-                    <Button color='blue' basic={commentCount===0?true:false}>
-                    <Icon name='comment' />
-                    </Button>
-                    <Label as='a' basic color='teal' pointing='left'>
-                           {commentCount}
-                    </Label>
-                </Button>
+               <CommentComponent post={{id, commentCount}}/>
                 {user && user.username===username &&
                 (
                     <Button  labelPosition='right' floated='right' onClick={deletePost}>

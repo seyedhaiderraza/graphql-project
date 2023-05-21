@@ -54,4 +54,26 @@ mutation DeletePost($postId: ID!) {
   deletePost(postId: $postId)
 }
 `
-export {CREATE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, LIKE_POST_MUTATION, DELETE_POST_MUTATION}
+const FETCH_SINGLE_POST_QUERY = gql`
+query($postId: ID!) {
+  getPost(postId: $postId) {
+    id
+    body
+    createdAt
+    likeCount
+    commentCount
+    comments {
+      createdAt
+      body
+      id
+      username
+    }
+   
+    likes {
+      username
+    }
+    username
+  }
+}
+`
+export {CREATE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, LIKE_POST_MUTATION, DELETE_POST_MUTATION, FETCH_SINGLE_POST_QUERY}
