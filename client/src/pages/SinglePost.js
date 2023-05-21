@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useContext, useState } from 'react'
-import { DELETE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, FETCH_SINGLE_POST_QUERY } from '../util/Query';
-import { Grid,Button, GridColumn, Card, Image, Icon } from 'semantic-ui-react';
+import React, { useContext, useRef, useState } from 'react'
+import { CREATE_COMMENT_MUTATION, DELETE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, FETCH_SINGLE_POST_QUERY } from '../util/Query';
+import { Grid,Button, GridColumn, Card, Image, Icon, Form } from 'semantic-ui-react';
 import LikeComponent from '../components/LikeComponent';
 import { AuthContext } from '../context/Auth';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -14,11 +14,17 @@ const SinglePost = () => {
     const {user} = useContext(AuthContext)
     const {postId} = useParams();
     const [error, setError] = useState(null)
- 
+    const [comment, setComment] = useState('')
+    const commentInputRef=useRef(null)//for blurring field after posting comment
    console.log('SinglePost---------postId=>',postId)
 
   
-   
+   const [createComment] = useMutation(CREATE_COMMENT_MUTATION,{
+    update(_,results){
+        setComment('')
+        commentInputRef.current.blur()
+    },variables:{postId:postId,body:comment}
+   })
     const {loading,data}=  useQuery(FETCH_SINGLE_POST_QUERY,{
        
         variables:{
@@ -86,6 +92,31 @@ const SinglePost = () => {
                       }
                  </Card.Content>
              </Card>
+             {
+                user && (
+                    <Card fluid>
+                        <Card.Content>
+                            <p>Post a Comment</p>
+                            <Form>
+
+                                <div className="ui action input fluid">
+                                    <input type="text" placeholder="Comment.."
+                                    name="comment"
+                                    value={comment}
+                                    onChange={event=>setComment(event.target.value)} />
+                                    <button type ="submit"
+                                    className="ui button teal"
+                                    onClick={createComment}
+                                    disabled={comment.trim===''}
+                                    ref={commentInputRef}>
+                                       Submit
+                                    </button>
+                                </div>
+                            </Form>
+                        </Card.Content>
+                    </Card>
+                )
+             }
              {
                 comments.map(comment=>(
                     <Card fluid key={comment.id}>
