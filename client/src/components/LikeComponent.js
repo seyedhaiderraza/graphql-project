@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Button, Icon, Label } from 'semantic-ui-react'
+import { Button, Icon, Label, Popup } from 'semantic-ui-react'
 import { AuthContext } from '../context/Auth'
 import { Link } from 'react-router-dom'
 import { LIKE_POST_MUTATION } from '../util/Query'
@@ -43,8 +43,9 @@ const LikeComponent = ({post:{id, likes, likeCount}}) => {
     
         )
     
-  return (
+  return ( <Popup inverted content='Like post' trigger={
     likeButtonComponent
+  }/>
   )
 }
 
