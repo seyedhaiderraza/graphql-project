@@ -4,3 +4,12 @@
     font-size: 2rem;
     margin-top: 10px;
 }
+
+#root{
+    height: 150vh;
+    background-color: rgb(218, 237, 255);
+}
+
+.ui.secondary.pointing.menu{
+    background-color: rgb(242, 249, 255);
+}

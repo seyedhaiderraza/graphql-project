@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { CREATE_COMMENT_MUTATION, DELETE_POST_MUTATION, FETCH_ALL_POSTS_QUERY, FETCH_SINGLE_POST_QUERY } from '../util/Query';
 import { Grid,Button, GridColumn, Card, Image, Icon, Form } from 'semantic-ui-react';
 import LikeComponent from '../components/LikeComponent';
@@ -10,6 +10,11 @@ import CommentComponent from '../components/CommentComponent';
 import DeleteComponent from '../components/DeleteComponent';
 
 const SinglePost = () => {
+    const [randomImageGen, setRandomImageGen] = useState(1)
+
+    useEffect(()=>{
+        setRandomImageGen(Math.floor(Math.random() * 15) + 1)
+    },[])
     const navigate = useNavigate()
     const {user} = useContext(AuthContext)
     const {postId} = useParams();
@@ -65,7 +70,7 @@ const SinglePost = () => {
              <Grid.Column width={2}>
              <Image floated="right"
               size="massive"
-             src="https://react.semantic-ui.com/images/avatar/large/molly.png"/>
+             src={require(`../images/${randomImageGen}.jpg`)}/>
              </Grid.Column>
              <Grid.Column width={10}>
              <Card fluid>
